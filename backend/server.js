@@ -13,7 +13,9 @@ const corsOptions = {
             'http://localhost:5173',
             'http://localhost:3000',
             'https://sb-furniture-frontend.vercel.app',
-            'https://sb-furniture-frontend.vercel.app/'
+            'https://sb-furniture-frontend.vercel.app/',
+            'https://sb-furniture.vercel.app',
+            'https://sb-furniture.vercel.app/'
         ];
         
         if (!origin || allowedOrigins.includes(origin)) {
