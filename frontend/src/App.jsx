@@ -31,7 +31,10 @@ const CustomerRoutes = () => {
       link.href = settings.favicon.url;
       document.head.appendChild(link);
     }
-  }, [settings?.favicon]);
+    if (settings?.siteTitle) {
+      document.title = settings.siteTitle;
+    }
+  }, [settings?.favicon, settings?.siteTitle]);
 
   const isAdmin = localStorage.getItem('adminToken');
 
