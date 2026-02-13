@@ -39,10 +39,10 @@ const Navbar = () => {
             left: 0, 
             right: 0, 
             zIndex: 1000,
-            background: scrolled ? 'rgba(18, 18, 18, 0.85)' : 'rgba(18, 18, 18, 0.3)',
+            background: scrolled ? 'rgba(255, 255, 255, 0.95)' : 'rgba(255, 255, 255, 0.85)',
             backdropFilter: 'blur(20px)',
             WebkitBackdropFilter: 'blur(20px)',
-            borderBottom: '1px solid rgba(255,255,255,0.08)',
+            borderBottom: '1px solid rgba(0,0,0,0.08)',
             transition: 'all 0.3s ease'
         }}>
             {/* Announcement Bar */}
@@ -96,7 +96,7 @@ const Navbar = () => {
                         {settings?.logo?.url ? (
                             <img src={settings.logo.url} alt="Logo" style={{ height: '2.2rem' }} />
                         ) : (
-                            <span style={{ fontSize: '1.5rem', fontWeight: 900, color: '#fff', letterSpacing: '-0.02em' }}>{settings?.brandName || 'FURNITURE.'}</span>
+                            <span style={{ fontSize: '1.5rem', fontWeight: 900, color: '#1a1a1a', letterSpacing: '-0.02em' }}>{settings?.brandName || 'FURNITURE.'}</span>
                         )}
                     </Link>
 
@@ -107,14 +107,13 @@ const Navbar = () => {
                                 key={link.name}
                                 to={link.path}
                                 style={{ 
-                                    color: location.pathname === link.path ? 'var(--gold)' : '#fff',
+                                    color: location.pathname === link.path ? 'var(--gold)' : '#333',
                                     textDecoration: 'none',
                                     fontSize: '0.8rem',
                                     fontWeight: 700,
                                     letterSpacing: '0.1em',
-                                    opacity: location.pathname === link.path ? 1 : 0.8,
-                                    transition: 'all 0.2s',
-                                    textShadow: '0 1px 3px rgba(0,0,0,0.3)'
+                                    opacity: location.pathname === link.path ? 1 : 0.85,
+                                    transition: 'all 0.2s'
                                 }}
                             >
                                 {link.name}
@@ -151,7 +150,7 @@ const Navbar = () => {
                     <button 
                         className="mobile-only"
                         onClick={() => setIsOpen(!isOpen)} 
-                        style={{ color: '#fff', background: 'transparent', border: 'none' }}
+                        style={{ color: '#333', background: 'transparent', border: 'none' }}
                     >
                         {isOpen ? <X size={28} /> : <Menu size={28} />}
                     </button>
@@ -177,7 +176,7 @@ const Navbar = () => {
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
                         style={{
-                            background: 'rgba(18, 18, 18, 0.98)',
+                            background: 'rgba(255, 255, 255, 0.98)',
                             backdropFilter: 'blur(20px)',
                             overflow: 'hidden'
                         }}
@@ -189,13 +188,13 @@ const Navbar = () => {
                                     to={link.path}
                                     onClick={() => setIsOpen(false)}
                                     style={{ 
-                                        color: location.pathname === link.path ? 'var(--gold)' : '#fff',
+                                        color: location.pathname === link.path ? 'var(--gold)' : '#333',
                                         textDecoration: 'none',
                                         fontSize: '1rem',
                                         fontWeight: 700,
                                         letterSpacing: '0.1em',
                                         padding: '0.5rem 0',
-                                        borderBottom: '1px solid rgba(255,255,255,0.05)'
+                                        borderBottom: '1px solid rgba(0,0,0,0.05)'
                                     }}
                                 >
                                     {link.name}
