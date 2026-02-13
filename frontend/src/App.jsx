@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { SettingsProvider, useSettings } from './context/SettingsContext';
 import { AuthProvider } from './context/AuthContext';
@@ -20,9 +20,19 @@ import AdminDashboard from './pages/admin/Dashboard';
 import AdminProducts from './pages/admin/AdminProducts';
 import AdminSettings from './pages/admin/AdminSettings';
 
-// Helper component to handle maintenance logic
+// Helper component to handle favicon and maintenance logic
 const CustomerRoutes = () => {
   const { settings } = useSettings();
+
+  useEffect(() => {
+    if (settings?.favicon?.url) {
+      const link = document.querySelector("link[rel~='icon']") || document.createElement('link');
+      link.rel = 'icon';
+      link.href = settings.favicon.url;
+      document.head.appendChild(link);
+    }
+  }, [settings?.favicon]);
+
   const isAdmin = localStorage.getItem('adminToken');
 
   if (settings?.maintenanceMode && !isAdmin) {

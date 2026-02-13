@@ -51,6 +51,19 @@ const AdminProducts = () => {
         setShowModal(true);
     };
 
+    const removeExistingImage = async (index) => {
+        if (!editProduct) return;
+        if (!confirm('Delete this image from Cloudinary?')) return;
+        try {
+            await API.delete(`/products/${editProduct._id}/images`, { data: { imageIndex: index } });
+            fetchProducts();
+            setEditProduct(null);
+            setShowModal(false);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
@@ -328,10 +341,26 @@ const AdminProducts = () => {
                                 {/* Image Upload */}
                                 <div className="flex-column" style={{ gap: '0.5rem' }}>
                                     <label style={labelStyle}>PRODUCT IMAGES</label>
+                                    {editProduct && editProduct.images && editProduct.images.length > 0 && (
+                                        <div className="flex" style={{ gap: '0.5rem', flexWrap: 'wrap', marginBottom: '0.5rem' }}>
+                                            {editProduct.images.map((img, idx) => (
+                                                <div key={idx} style={{ position: 'relative', width: '80px', height: '80px', borderRadius: '0.5rem', overflow: 'hidden' }}>
+                                                    <img src={img.url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => removeExistingImage(idx)}
+                                                        style={{ position: 'absolute', top: 2, right: 2, background: '#ef4444', color: 'white', border: 'none', borderRadius: '50%', width: '20px', height: '20px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px' }}
+                                                    >
+                                                        ×
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
                                     <label className="flex-center flex-column" style={{ padding: '1.5rem', borderRadius: '1rem', border: '2px dashed rgba(0,0,0,0.1)', cursor: 'pointer', gap: '0.5rem', background: 'var(--crease)' }}>
                                         <ImageIcon size={24} style={{ opacity: 0.3 }} />
                                         <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--stone)' }}>
-                                            {formData.images.length > 0 ? `${formData.images.length} image(s) selected` : 'Click to upload images'}
+                                            {formData.images.length > 0 ? `${formData.images.length} new image(s) selected` : 'Click to upload images'}
                                         </span>
                                         <input type="file" multiple accept="image/*" onChange={e => setFormData({ ...formData, images: [...e.target.files] })} style={{ display: 'none' }} />
                                     </label>

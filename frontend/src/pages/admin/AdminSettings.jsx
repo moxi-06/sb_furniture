@@ -85,6 +85,25 @@ const AdminSettings = () => {
         setFiles({ ...files, [key]: e.target.files[0] });
     };
 
+    const deleteImage = async (field) => {
+        if (!window.confirm('Are you sure you want to delete this image?')) return;
+        try {
+            await API.delete(`/settings/image/${field}`);
+            fetchSettings();
+            setMessage('Image deleted');
+            setTimeout(() => setMessage(''), 3000);
+        } catch (err) {
+            console.error(err);
+            setMessage('Error deleting image');
+        }
+    };
+
+    const clearFile = (key) => {
+        const newFiles = { ...files };
+        delete newFiles[key];
+        setFiles(newFiles);
+    };
+
     const addItem = (key, defaultObj) => {
         const current = formData[key] || [];
         setFormData({ ...formData, [key]: [...current, defaultObj] });
@@ -280,6 +299,16 @@ const AdminSettings = () => {
                                                 UPLOAD LOGO
                                                 <input type="file" accept="image/*" onChange={e => handleFileChange(e, 'logo')} style={{ display: 'none' }} />
                                             </label>
+                                            {settings?.logo?.url && (
+                                                <button type="button" onClick={() => deleteImage('logo')} style={{ background: '#ef4444', color: 'white', border: 'none', padding: '0.75rem 1rem', borderRadius: '0.75rem', cursor: 'pointer', fontWeight: 800, fontSize: '0.7rem' }}>
+                                                    DELETE
+                                                </button>
+                                            )}
+                                            {files.logo && (
+                                                <button type="button" onClick={() => clearFile('logo')} style={{ background: '#f59e0b', color: 'white', border: 'none', padding: '0.75rem 1rem', borderRadius: '0.75rem', cursor: 'pointer', fontWeight: 800, fontSize: '0.7rem' }}>
+                                                    CLEAR
+                                                </button>
+                                            )}
                                         </div>
                                     </div>
                                     <div style={fieldRowStyle}>
@@ -292,6 +321,16 @@ const AdminSettings = () => {
                                                 UPLOAD ICON
                                                 <input type="file" accept="image/*" onChange={e => handleFileChange(e, 'favicon')} style={{ display: 'none' }} />
                                             </label>
+                                            {settings?.favicon?.url && (
+                                                <button type="button" onClick={() => deleteImage('favicon')} style={{ background: '#ef4444', color: 'white', border: 'none', padding: '0.75rem 1rem', borderRadius: '0.75rem', cursor: 'pointer', fontWeight: 800, fontSize: '0.7rem' }}>
+                                                    DELETE
+                                                </button>
+                                            )}
+                                            {files.favicon && (
+                                                <button type="button" onClick={() => clearFile('favicon')} style={{ background: '#f59e0b', color: 'white', border: 'none', padding: '0.75rem 1rem', borderRadius: '0.75rem', cursor: 'pointer', fontWeight: 800, fontSize: '0.7rem' }}>
+                                                    CLEAR
+                                                </button>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
@@ -467,11 +506,16 @@ const AdminSettings = () => {
                                             <label style={labelStyle}>Popup Image</label>
                                             <div style={{ position: 'relative', height: '200px', borderRadius: '1.5rem', overflow: 'hidden', border: '1px solid rgba(0,0,0,0.05)' }}>
                                                 <img src={files.promoPopupImage ? URL.createObjectURL(files.promoPopupImage) : settings?.promoPopupImage?.url} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="" />
-                                                <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                                <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
                                                     <label className="admin-btn" style={{ background: 'white', color: 'var(--charcoal)', fontSize: '0.65rem', padding: '0.6rem 1rem', borderRadius: '0.75rem', cursor: 'pointer', fontWeight: 900 }}>
                                                         CHANGE
                                                         <input type="file" onChange={e => handleFileChange(e, 'promoPopupImage')} style={{ display: 'none' }} />
                                                     </label>
+                                                    {(settings?.promoPopupImage?.url || files.promoPopupImage) && (
+                                                        <button type="button" onClick={() => { deleteImage('promoPopupImage'); clearFile('promoPopupImage'); }} style={{ background: '#ef4444', color: 'white', border: 'none', padding: '0.6rem 1rem', borderRadius: '0.75rem', cursor: 'pointer', fontWeight: 900, fontSize: '0.65rem' }}>
+                                                            DELETE
+                                                        </button>
+                                                    )}
                                                 </div>
                                             </div>
                                         </div>
@@ -641,6 +685,7 @@ const AdminSettings = () => {
                             <div className="flex-column" style={{ gap: '2rem' }}>
                                 <SectionHeader icon={Phone} title="Contact Support" description="Let customers reach you easily." />
                                 <div style={fieldRowStyle}><label style={labelStyle}>WhatsApp Number</label><input type="text" value={formData.whatsappNumber || ''} onChange={e => setFormData({ ...formData, whatsappNumber: e.target.value })} style={inputStyle} /></div>
+                                <div style={fieldRowStyle}><label style={labelStyle}>Contact Phone</label><input type="text" value={formData.contactPhone || ''} onChange={e => setFormData({ ...formData, contactPhone: e.target.value })} style={inputStyle} /></div>
                                 <div style={fieldRowStyle}><label style={labelStyle}>Public Email</label><input type="email" value={formData.email || ''} onChange={e => setFormData({ ...formData, email: e.target.value })} style={inputStyle} /></div>
                                 <div style={fieldRowStyle}><label style={labelStyle}>Physical Address</label><textarea rows="2" value={formData.address || ''} onChange={e => setFormData({ ...formData, address: e.target.value })} style={{ ...inputStyle, resize: 'none' }}></textarea></div>
                                 <div style={fieldRowStyle}><label style={labelStyle}>Map Location Link (Google Maps)</label><input type="text" value={formData.mapLink || ''} onChange={e => setFormData({ ...formData, mapLink: e.target.value })} style={inputStyle} placeholder="https://maps.google.com/..." /></div>

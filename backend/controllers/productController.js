@@ -101,7 +101,13 @@ const deleteProduct = async (req, res) => {
 
         // Delete images from Cloudinary
         for (const image of product.images) {
-            await cloudinary.uploader.destroy(image.public_id);
+            if (image.public_id) {
+                try {
+                    await cloudinary.uploader.destroy(image.public_id);
+                } catch (err) {
+                    console.error('Error deleting image from Cloudinary:', err);
+                }
+            }
         }
 
         await product.deleteOne();
@@ -111,4 +117,32 @@ const deleteProduct = async (req, res) => {
     }
 };
 
-module.exports = { getProducts, getProductById, createProduct, updateProduct, deleteProduct };
+// Delete single image from product
+const deleteProductImage = async (req, res) => {
+    try {
+        const { imageIndex } = req.body;
+        const product = await Product.findById(req.params.id);
+        if (!product) return res.status(404).json({ message: 'Product not found' });
+
+        const idx = parseInt(imageIndex);
+        if (idx >= 0 && idx < product.images.length) {
+            const image = product.images[idx];
+            if (image.public_id) {
+                try {
+                    await cloudinary.uploader.destroy(image.public_id);
+                } catch (err) {
+                    console.error('Error deleting image from Cloudinary:', err);
+                }
+            }
+            product.images.splice(idx, 1);
+            await product.save();
+            res.json(product);
+        } else {
+            res.status(400).json({ message: 'Invalid image index' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+module.exports = { getProducts, getProductById, createProduct, updateProduct, deleteProduct, deleteProductImage };
