@@ -39,10 +39,11 @@ const Navbar = () => {
             left: 0, 
             right: 0, 
             zIndex: 1000,
-            background: scrolled ? 'rgba(255, 255, 255, 0.95)' : 'rgba(255, 255, 255, 0.85)',
+            background: scrolled ? 'rgba(255, 255, 255, 0.7)' : 'rgba(255, 255, 255, 0.5)',
             backdropFilter: 'blur(20px)',
             WebkitBackdropFilter: 'blur(20px)',
-            borderBottom: '1px solid rgba(0,0,0,0.08)',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.3)',
+            boxShadow: scrolled ? '0 4px 30px rgba(0, 0, 0, 0.08)' : 'none',
             transition: 'all 0.3s ease'
         }}>
             {/* Announcement Bar */}
@@ -176,8 +177,11 @@ const Navbar = () => {
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
                         style={{
-                            background: 'rgba(255, 255, 255, 0.98)',
+                            background: 'rgba(255, 255, 255, 0.8)',
                             backdropFilter: 'blur(20px)',
+                            WebkitBackdropFilter: 'blur(20px)',
+                            borderBottom: '1px solid rgba(255, 255, 255, 0.3)',
+                            boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
                             overflow: 'hidden'
                         }}
                     >
