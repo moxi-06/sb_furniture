@@ -1,9 +1,11 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { SettingsProvider, useSettings } from './context/SettingsContext';
 import { AuthProvider } from './context/AuthContext';
 import Layout from './components/Layout';
 import ProtectedRoute from './components/ProtectedRoute';
+import LoadingScreen from './components/LoadingScreen';
+import { AnimatePresence } from 'framer-motion';
 
 // Customer Pages
 import Home from './pages/Home';
@@ -22,24 +24,30 @@ import AdminSettings from './pages/admin/AdminSettings';
 
 // Helper component to handle maintenance logic
 const CustomerRoutes = () => {
-  const { settings } = useSettings();
+  const { settings, loading } = useSettings();
   const isAdmin = localStorage.getItem('adminToken');
 
-  if (settings?.maintenanceMode && !isAdmin) {
-    return <Maintenance />;
-  }
-
   return (
-    <Layout>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/products" element={<Products />} />
-        <Route path="/product/:id" element={<ProductDetail />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="*" element={<div className="flex-center flex-column" style={{ height: '60vh', gap: '2rem', textAlign: 'center' }}><h1 style={{ fontSize: '4rem', fontWeight: 900 }}>404</h1><p style={{ color: 'var(--stone)', fontSize: '1.2rem' }}>Page Not Found</p></div>} />
-      </Routes>
-    </Layout>
+    <>
+      <AnimatePresence>
+        {loading && <LoadingScreen key="loader" />}
+      </AnimatePresence>
+
+      {!loading && settings?.maintenanceMode && !isAdmin ? (
+        <Maintenance />
+      ) : (
+        <Layout>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/product/:id" element={<ProductDetail />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="*" element={<div className="flex-center flex-column" style={{ height: '60vh', gap: '2rem', textAlign: 'center' }}><h1 style={{ fontSize: '4rem', fontWeight: 900 }}>404</h1><p style={{ color: 'var(--stone)', fontSize: '1.2rem' }}>Page Not Found</p></div>} />
+          </Routes>
+        </Layout>
+      )}
+    </>
   );
 };
 

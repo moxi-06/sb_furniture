@@ -8,14 +8,40 @@ const Navbar = () => {
     const { settings } = useSettings();
     const [isOpen, setIsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
+    const [activeSection, setActiveSection] = useState('');
     const [announcementDismissed, setAnnouncementDismissed] = useState(false);
     const location = useLocation();
 
     useEffect(() => {
-        const handleScroll = () => setScrolled(window.scrollY > 20);
+        const sections = ['hero', 'customization', 'quality', 'categories', 'customers', 'testimonials'];
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 20);
+
+            if (location.pathname === '/') {
+                const scrollPosition = window.scrollY + 85; // Navbar height + small buffer
+                let current = 'hero';
+
+                for (const section of sections) {
+                    const el = document.getElementById(section);
+                    if (el) {
+                        const offsetTop = el.offsetTop;
+                        const height = el.offsetHeight;
+                        if (scrollPosition >= offsetTop && scrollPosition < offsetTop + height) {
+                            current = section;
+                        }
+                    }
+                }
+                setActiveSection(current);
+            } else {
+                setActiveSection('');
+            }
+        };
+
         window.addEventListener('scroll', handleScroll);
+        // Run once on load
+        handleScroll();
         return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+    }, [location.pathname]);
 
     const handleDismissAnnouncement = () => {
         setAnnouncementDismissed(true);
@@ -28,21 +54,35 @@ const Navbar = () => {
     const navLinks = [
         { name: 'HOME', path: '/' },
         { name: 'PRODUCTS', path: '/products' },
+        { name: 'CUSTOMIZE', path: '/#customization' },
+        { name: 'CUSTOMERS', path: '/#customers' },
         { name: 'ABOUT US', path: '/about' },
         { name: 'CONTACT', path: '/contact' },
     ];
 
+    const isLinkActive = (path) => {
+        if (location.pathname === '/') {
+            if (path === '/') return activeSection === 'hero';
+            if (path.includes('#')) {
+                const hash = path.split('#')[1];
+                return activeSection === hash;
+            }
+            return false;
+        }
+        return location.pathname === path;
+    };
+
     return (
-        <nav style={{ 
-            position: 'fixed', 
-            top: 0, 
-            left: 0, 
-            right: 0, 
+        <nav style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
             zIndex: 1000,
-            background: scrolled ? 'rgba(18, 18, 18, 0.85)' : 'rgba(18, 18, 18, 0.3)',
+            background: scrolled ? 'rgba(255, 255, 255, 0.95)' : 'rgba(255, 255, 255, 0.85)',
             backdropFilter: 'blur(20px)',
             WebkitBackdropFilter: 'blur(20px)',
-            borderBottom: '1px solid rgba(255,255,255,0.08)',
+            borderBottom: '1px solid rgba(0,0,0,0.08)',
             transition: 'all 0.3s ease'
         }}>
             {/* Announcement Bar */}
@@ -92,29 +132,28 @@ const Navbar = () => {
             <div className="container" style={{ padding: '1rem 2rem' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     {/* Logo */}
-                    <Link to="/" style={{ textDecoration: 'none' }}>
+                    <Link to="/" style={{ textDecoration: 'none' }} onClick={() => setIsOpen(false)}>
                         {settings?.logo?.url ? (
-                            <img src={settings.logo.url} alt="Logo" style={{ height: '2.2rem' }} />
+                            <img src={settings.logo.url} alt="Logo" style={{ height: '2.5rem' }} />
                         ) : (
-                            <span style={{ fontSize: '1.5rem', fontWeight: 900, color: '#fff', letterSpacing: '-0.02em' }}>{settings?.brandName || 'FURNITURE.'}</span>
+                            <span style={{ fontSize: '1.6rem', fontWeight: 900, color: '#1a1a1a', letterSpacing: '-0.04em' }}>{settings?.brandName || 'FURNITURE.'}</span>
                         )}
                     </Link>
 
                     {/* Desktop Menu */}
-                    <div className="desktop-only" style={{ display: 'flex', gap: '2rem' }}>
+                    <div className="desktop-only" style={{ gap: '2.5rem', alignItems: 'center' }}>
                         {navLinks.map((link) => (
                             <Link
                                 key={link.name}
                                 to={link.path}
-                                style={{ 
-                                    color: location.pathname === link.path ? 'var(--gold)' : '#fff',
+                                style={{
+                                    color: isLinkActive(link.path) ? 'var(--gold)' : '#333',
                                     textDecoration: 'none',
-                                    fontSize: '0.8rem',
-                                    fontWeight: 700,
-                                    letterSpacing: '0.1em',
-                                    opacity: location.pathname === link.path ? 1 : 0.8,
-                                    transition: 'all 0.2s',
-                                    textShadow: '0 1px 3px rgba(0,0,0,0.3)'
+                                    fontSize: '0.75rem',
+                                    fontWeight: 900,
+                                    letterSpacing: '0.15em',
+                                    opacity: 1,
+                                    transition: 'all 0.3s'
                                 }}
                             >
                                 {link.name}
@@ -128,18 +167,18 @@ const Navbar = () => {
                             href={`https://wa.me/${settings?.whatsappNumber}`}
                             target="_blank"
                             rel="noopener noreferrer"
+                            className="gold-gradient text-white"
                             style={{
-                                background: 'var(--gold)',
-                                color: '#fff',
-                                padding: '0.6rem 1.2rem',
+                                padding: '0.8rem 1.8rem',
                                 borderRadius: '2rem',
-                                fontSize: '0.7rem',
-                                fontWeight: 800,
+                                fontSize: '0.75rem',
+                                fontWeight: 900,
                                 letterSpacing: '0.1em',
                                 textDecoration: 'none',
                                 display: 'flex',
                                 alignItems: 'center',
-                                gap: '0.5rem'
+                                gap: '0.6rem',
+                                boxShadow: '0 10px 20px rgba(212, 175, 55, 0.2)'
                             }}
                         >
                             <MessageSquare size={14} />
@@ -148,76 +187,85 @@ const Navbar = () => {
                     </div>
 
                     {/* Mobile Toggle */}
-                    <button 
+                    <button
                         className="mobile-only"
-                        onClick={() => setIsOpen(!isOpen)} 
-                        style={{ color: '#fff', background: 'transparent', border: 'none' }}
+                        onClick={() => setIsOpen(!isOpen)}
+                        style={{ color: 'var(--charcoal)', background: 'transparent', border: 'none', padding: '0.5rem' }}
                     >
-                        {isOpen ? <X size={28} /> : <Menu size={28} />}
+                        {isOpen ? <X size={32} /> : <Menu size={32} />}
                     </button>
                 </div>
             </div>
 
-            <style>{`
-                @media (max-width: 768px) {
-                    .desktop-only { display: none !important; }
-                    .mobile-only { display: block !important; }
-                }
-                @media (min-width: 769px) {
-                    .desktop-only { display: flex !important; }
-                    .mobile-only { display: none !important; }
-                }
-            `}</style>
 
             {/* Mobile Menu */}
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
                         style={{
-                            background: 'rgba(18, 18, 18, 0.98)',
-                            backdropFilter: 'blur(20px)',
-                            overflow: 'hidden'
+                            position: 'absolute',
+                            top: '100%',
+                            left: 0,
+                            right: 0,
+                            background: 'rgba(255, 255, 255, 0.98)',
+                            backdropFilter: 'blur(30px)',
+                            WebkitBackdropFilter: 'blur(30px)',
+                            borderBottom: '1px solid rgba(0,0,0,0.05)',
+                            padding: '2rem',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '1.2rem',
+                            boxShadow: '0 20px 40px rgba(0,0,0,0.1)'
                         }}
                     >
-                        <div style={{ padding: '1.5rem 2rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                            {navLinks.map((link) => (
-                                <Link
-                                    key={link.name}
-                                    to={link.path}
-                                    onClick={() => setIsOpen(false)}
-                                    style={{ 
-                                        color: location.pathname === link.path ? 'var(--gold)' : '#fff',
-                                        textDecoration: 'none',
-                                        fontSize: '1rem',
-                                        fontWeight: 700,
-                                        letterSpacing: '0.1em',
-                                        padding: '0.5rem 0',
-                                        borderBottom: '1px solid rgba(255,255,255,0.05)'
-                                    }}
-                                >
-                                    {link.name}
-                                </Link>
-                            ))}
-                            <a
-                                href={`https://wa.me/${settings?.whatsappNumber}`}
+                        {navLinks.map((link) => (
+                            <Link
+                                key={link.name}
+                                to={link.path}
+                                onClick={() => setIsOpen(false)}
                                 style={{
-                                    background: 'var(--gold)',
-                                    color: '#fff',
-                                    padding: '1rem',
-                                    borderRadius: '1rem',
-                                    fontSize: '0.8rem',
-                                    fontWeight: 800,
-                                    letterSpacing: '0.1em',
+                                    color: isLinkActive(link.path) ? 'var(--gold)' : '#333',
                                     textDecoration: 'none',
-                                    textAlign: 'center'
+                                    fontSize: '0.9rem',
+                                    fontWeight: 800,
+                                    letterSpacing: '0.15em',
+                                    padding: '0.8rem 0',
+                                    borderBottom: '1px solid rgba(0,0,0,0.03)',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'space-between'
                                 }}
                             >
-                                {settings?.whatsappBtnText || 'WHATSAPP'}
-                            </a>
-                        </div>
+                                {link.name}
+                                <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: isLinkActive(link.path) ? 'var(--gold)' : 'transparent' }}></div>
+                            </Link>
+                        ))}
+                        <a
+                            href={`https://wa.me/${settings?.whatsappNumber}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="gold-gradient text-white"
+                            style={{
+                                padding: '1.2rem',
+                                borderRadius: '1.25rem',
+                                fontSize: '0.8rem',
+                                fontWeight: 900,
+                                letterSpacing: '0.1em',
+                                textDecoration: 'none',
+                                textAlign: 'center',
+                                marginTop: '1rem',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: '0.8rem'
+                            }}
+                        >
+                            <MessageSquare size={18} />
+                            {settings?.whatsappBtnText || 'CONNECT ON WHATSAPP'}
+                        </a>
                     </motion.div>
                 )}
             </AnimatePresence>

@@ -8,7 +8,6 @@ import {
     Palette,
     Layout,
     Shield,
-    ShoppingBag,
     Info,
     Megaphone,
     Boxes,
@@ -26,6 +25,21 @@ import {
     User
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+
+const SectionHeader = ({ icon: Icon, title, description }) => {
+    const HeaderIcon = Icon;
+    return (
+        <div style={{ marginBottom: '2.5rem' }}>
+            <div className="flex" style={{ alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
+                <div className="flex-center" style={{ width: '2.5rem', height: '2.5rem', borderRadius: '0.75rem', background: 'var(--gold)', color: 'white' }}>
+                    <HeaderIcon size={18} />
+                </div>
+                <h3 style={{ fontSize: '1.2rem', fontWeight: 900 }}>{title}</h3>
+            </div>
+            {description && <p style={{ fontSize: '0.85rem', color: 'var(--stone)' }}>{description}</p>}
+        </div>
+    );
+};
 
 const AdminSettings = () => {
     const { settings, fetchSettings } = useSettings();
@@ -52,7 +66,7 @@ const AdminSettings = () => {
         const data = new FormData();
 
         // Remove internal fields and handled image objects
-        const { _id, __v, logo, heroImage, promoPopupImage, favicon, ...rest } = formData;
+        const { _id, __v, logo: _logo, heroImage: _heroImage, promoPopupImage: _promoPopupImage, favicon: _favicon, customizationImage: _customizationImage, ...rest } = formData;
 
         Object.keys(rest).forEach(key => {
             if (typeof rest[key] === 'object' && rest[key] !== null) {
@@ -178,26 +192,16 @@ const AdminSettings = () => {
         { id: 'home', name: 'Sections', icon: Layout },
         { id: 'marketing', name: 'Marketing', icon: Megaphone },
         { id: 'inventory', name: 'Business', icon: Boxes },
+        { id: 'customization', name: 'Customization', icon: Zap },
+        { id: 'customers', name: 'Customers', icon: User },
         { id: 'testimonials', name: 'Reviews', icon: Star },
         { id: 'faq', name: 'FAQ', icon: HelpCircle },
         { id: 'about', name: 'About ', icon: Info },
         { id: 'contact', name: 'Contact', icon: Phone },
         { id: 'policies', name: 'Policies', icon: Shield },
-        { id: 'advanced', name: 'Advanced', icon: Code },
+        { id: 'seo', name: 'SEO & Advanced', icon: Globe },
         { id: 'account', name: 'Account', icon: User },
     ];
-
-    const SectionHeader = ({ icon: Icon, title, description }) => (
-        <div style={{ marginBottom: '2.5rem' }}>
-            <div className="flex" style={{ alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
-                <div className="flex-center" style={{ width: '2.5rem', height: '2.5rem', borderRadius: '0.75rem', background: 'var(--gold)', color: 'white' }}>
-                    <Icon size={18} />
-                </div>
-                <h3 style={{ fontSize: '1.2rem', fontWeight: 900 }}>{title}</h3>
-            </div>
-            {description && <p style={{ fontSize: '0.85rem', color: 'var(--stone)' }}>{description}</p>}
-        </div>
-    );
 
     return (
         <div className="flex-column" style={{ gap: '2rem', paddingBottom: '8rem' }}>
@@ -551,6 +555,80 @@ const AdminSettings = () => {
                             </div>
                         )}
 
+                        {/* TAB: CUSTOMIZATION (King of Customization) */}
+                        {activeTab === 'customization' && (
+                            <div className="flex-column" style={{ gap: '2rem' }}>
+                                <SectionHeader icon={Zap} title="King of Customization" description="Manage the bespoke service section on the homepage." />
+
+                                <label className="flex-center" style={{ gap: '0.5rem', fontWeight: 800, fontSize: '0.8rem', alignSelf: 'flex-start' }}>
+                                    <input type="checkbox" checked={formData.showCustomizationSection} onChange={e => setFormData({ ...formData, showCustomizationSection: e.target.checked })} style={{ width: '1.2rem', height: '1.2rem', accentColor: 'var(--gold)' }} />
+                                    Enable Customization Section
+                                </label>
+
+                                <div style={fieldRowStyle}>
+                                    <label style={labelStyle}>Section Title</label>
+                                    <input type="text" value={formData.customizationTitle || ''} onChange={e => setFormData({ ...formData, customizationTitle: e.target.value })} style={inputStyle} />
+                                </div>
+
+                                <div style={fieldRowStyle}>
+                                    <label style={labelStyle}>Section Subtitle</label>
+                                    <textarea rows="3" value={formData.customizationSubtitle || ''} onChange={e => setFormData({ ...formData, customizationSubtitle: e.target.value })} style={{ ...inputStyle, resize: 'vertical' }}></textarea>
+                                </div>
+
+                                <div style={fieldRowStyle}>
+                                    <label style={labelStyle}>Showcase Image</label>
+                                    <div style={{ position: 'relative', height: '300px', borderRadius: '2rem', overflow: 'hidden', border: '1px solid rgba(0,0,0,0.05)' }}>
+                                        <img src={files.customizationImage ? URL.createObjectURL(files.customizationImage) : settings?.customizationImage?.url} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="" />
+                                        <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                            <label className="admin-btn" style={{ background: 'white', color: 'var(--charcoal)', fontSize: '0.7rem', padding: '0.8rem 1.5rem', borderRadius: '1rem', cursor: 'pointer', fontWeight: 900 }}>
+                                                CHANGE IMAGE
+                                                <input type="file" onChange={e => handleFileChange(e, 'customizationImage')} style={{ display: 'none' }} />
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* TAB: CUSTOMERS */}
+                        {activeTab === 'customers' && (
+                            <div className="flex-column" style={{ gap: '2rem' }}>
+                                <div className="flex-between">
+                                    <SectionHeader icon={User} title="Our Customers" description="Showcase well-known people or companies you've served." />
+                                    <button onClick={() => addItem('customers', { name: '', image: { url: '' } })} type="button" className="admin-btn flex-center" style={{ background: 'var(--charcoal)', color: 'white', gap: '0.5rem', padding: '0.8rem 1.5rem', borderRadius: '1rem', fontSize: '0.7rem' }}>
+                                        <Plus size={16} /> ADD CUSTOMER
+                                    </button>
+                                </div>
+
+                                <label className="flex-center" style={{ gap: '0.5rem', fontWeight: 800, fontSize: '0.8rem', alignSelf: 'flex-start' }}>
+                                    <input type="checkbox" checked={formData.showCustomersSection} onChange={e => setFormData({ ...formData, showCustomersSection: e.target.checked })} style={{ width: '1.2rem', height: '1.2rem', accentColor: 'var(--gold)' }} />
+                                    Enable Customers Section
+                                </label>
+
+                                <div style={fieldRowStyle}>
+                                    <label style={labelStyle}>Section Title</label>
+                                    <input type="text" value={formData.customersSectionTitle || ''} onChange={e => setFormData({ ...formData, customersSectionTitle: e.target.value })} style={inputStyle} />
+                                </div>
+
+                                <div className="flex-column" style={{ gap: '1.5rem' }}>
+                                    {(formData.customers || []).map((c, idx) => (
+                                        <div key={idx} className="flex" style={{ gap: '1.5rem', padding: '1.5rem', border: '1px solid rgba(0,0,0,0.05)', borderRadius: '1.5rem', alignItems: 'center', position: 'relative' }}>
+                                            <button onClick={() => removeItem('customers', idx)} type="button" style={{ position: 'absolute', top: '1rem', right: '1rem', color: '#ef4444' }}><Trash2 size={16} /></button>
+
+                                            <div style={{ width: '5rem', height: '5rem', background: 'var(--crease)', borderRadius: '1rem', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                                {c.image?.url && <img src={c.image.url} style={{ width: '100%', height: '100%', objectFit: 'contain' }} alt="" />}
+                                            </div>
+
+                                            <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                                <label style={labelStyle}>Customer Name</label>
+                                                <input type="text" value={c.name} onChange={e => updateItem('customers', idx, 'name', e.target.value)} style={inputStyle} />
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
                         {/* TAB: TESTIMONIALS */}
                         {activeTab === 'testimonials' && (
                             <div className="flex-column" style={{ gap: '2rem' }}>
@@ -597,32 +675,74 @@ const AdminSettings = () => {
                             </div>
                         )}
 
-                        {/* TAB: ADVANCED (SEO, CSS, Maintenance) */}
-                        {activeTab === 'advanced' && (
+                        {/* TAB: SEO & ADVANCED */}
+                        {activeTab === 'seo' && (
                             <div className="flex-column" style={{ gap: '2.5rem' }}>
                                 <div className="flex-column" style={{ gap: '1.5rem' }}>
-                                    <SectionHeader icon={Globe} title="SEO Configuration" description="Control how your site appears in Search Engines." />
-                                    <div style={fieldRowStyle}><label style={labelStyle}>Site Title (Browser Tab)</label><input type="text" value={formData.siteTitle || ''} onChange={e => setFormData({ ...formData, siteTitle: e.target.value })} style={inputStyle} /></div>
-                                    <div style={fieldRowStyle}><label style={labelStyle}>Meta Description</label><textarea rows="2" value={formData.siteMetaDescription || ''} onChange={e => setFormData({ ...formData, siteMetaDescription: e.target.value })} style={{ ...inputStyle, resize: 'none' }}></textarea></div>
-                                    <div style={fieldRowStyle}><label style={labelStyle}>Keywords (Comma separated)</label><input type="text" value={formData.siteKeywords || ''} onChange={e => setFormData({ ...formData, siteKeywords: e.target.value })} style={inputStyle} /></div>
-                                </div>
+                                    <SectionHeader icon={Globe} title="SEO Configuration" description="Optimize how your site appears in Google Search." />
 
-                                <div className="flex-column" style={{ gap: '1.5rem', borderTop: '1px solid rgba(0,0,0,0.05)', paddingTop: '2.5rem' }}>
-                                    <SectionHeader icon={Shield} title="Maintenance Mode" description="Hide your site during major catalogue updates." />
-                                    <div className="glass-card" style={{ background: '#fffbeb', border: '1px solid #fde68a', padding: '1.5rem', borderRadius: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                                        <label className="flex-between" style={{ cursor: 'pointer' }}>
-                                            <span style={{ fontSize: '0.9rem', fontWeight: 900, color: '#92400e' }}>ACTIVATE MAINTENANCE MODE</span>
-                                            <input type="checkbox" checked={formData.maintenanceMode} onChange={e => setFormData({ ...formData, maintenanceMode: e.target.checked })} style={{ width: '1.5rem', height: '1.5rem', accentColor: '#92400e' }} />
-                                        </label>
-                                        <p style={{ fontSize: '0.8rem', color: '#92400e', fontWeight: 600 }}>Guests will see a placeholder page. Admins still have full access.</p>
-                                        <div style={fieldRowStyle}><label style={{ ...labelStyle, color: '#92400e' }}>Maintenance Message</label><input type="text" value={formData.maintenanceMessage || ''} onChange={e => setFormData({ ...formData, maintenanceMessage: e.target.value })} style={{ ...inputStyle, background: 'white' }} /></div>
+                                    <div style={fieldRowStyle}>
+                                        <label style={labelStyle}>Site Title (Browser Tab)</label>
+                                        <input type="text" value={formData.siteTitle || ''} onChange={e => setFormData({ ...formData, siteTitle: e.target.value })} style={inputStyle} placeholder="Sai Balaji Furniture - Best Furniture Shop in Madhavaram" />
+                                    </div>
+
+                                    <div style={fieldRowStyle}>
+                                        <label style={labelStyle}>Meta Description (Google Snippet)</label>
+                                        <textarea rows="3" value={formData.siteMetaDescription || ''} onChange={e => setFormData({ ...formData, siteMetaDescription: e.target.value })} style={{ ...inputStyle, resize: 'vertical' }} placeholder="Affordable quality furniture in Madhavaram for homes, schools & bulk buyers..."></textarea>
+                                    </div>
+
+                                    <div style={fieldRowStyle}>
+                                        <label style={labelStyle}>SEO Keywords (Comma separated)</label>
+                                        <textarea rows="4" value={formData.siteKeywords || ''} onChange={e => setFormData({ ...formData, siteKeywords: e.target.value })} style={{ ...inputStyle, resize: 'vertical', fontSize: '0.8rem' }} placeholder="Furniture shop in Madhavaram, Best furniture store Madhavaram Chennai..."></textarea>
+                                    </div>
+
+                                    <div className="flex" style={{ gap: '2rem', alignItems: 'flex-start' }}>
+                                        <div style={fieldRowStyle}>
+                                            <label style={labelStyle}>Site Favicon</label>
+                                            <div style={{ position: 'relative', height: '100px', width: '100px', borderRadius: '1.5rem', overflow: 'hidden', border: '2px dashed rgba(0,0,0,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white' }}>
+                                                {files.favicon ? (
+                                                    <img src={URL.createObjectURL(files.favicon)} style={{ width: '80%', height: '80%', objectFit: 'contain' }} alt="" />
+                                                ) : settings?.favicon?.url ? (
+                                                    <img src={settings.favicon.url} style={{ width: '80%', height: '80%', objectFit: 'contain' }} alt="" />
+                                                ) : (
+                                                    <ImageIcon size={32} opacity={0.2} />
+                                                )}
+                                                <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.4)', opacity: 0, transition: 'all 0.3s', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }} onMouseEnter={e => e.currentTarget.style.opacity = 1} onMouseLeave={e => e.currentTarget.style.opacity = 0}>
+                                                    <label style={{ cursor: 'pointer' }}>
+                                                        <Plus size={24} color="white" />
+                                                        <input type="file" onChange={e => handleFileChange(e, 'favicon')} style={{ display: 'none' }} />
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div style={{ flexGrow: 1 }}>
+                                            <div style={fieldRowStyle}>
+                                                <label style={labelStyle}>Showroom Address (SEO Location)</label>
+                                                <input type="text" value={formData.address || ''} onChange={e => setFormData({ ...formData, address: e.target.value })} style={inputStyle} placeholder="Roja Nagar, Madhavaram, Chennai, Tamil Nadu – 600060" />
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
                                 <div className="flex-column" style={{ gap: '1.5rem', borderTop: '1px solid rgba(0,0,0,0.05)', paddingTop: '2.5rem' }}>
-                                    <SectionHeader icon={Code} title="Custom CSS & Integration" description="Inject custom styles or tracking scripts (G-Analytics)." />
-                                    <div style={fieldRowStyle}><label style={labelStyle}>Custom CSS</label><textarea rows="5" value={formData.customCSS || ''} onChange={e => setFormData({ ...formData, customCSS: e.target.value })} style={{ ...inputStyle, fontFamily: 'monospace', fontSize: '0.8rem' }} placeholder="/* Add your styles here */"></textarea></div>
-                                    <div style={fieldRowStyle}><label style={labelStyle}>Head Scripts (JS)</label><textarea rows="5" value={formData.customJS || ''} onChange={e => setFormData({ ...formData, customJS: e.target.value })} style={{ ...inputStyle, fontFamily: 'monospace', fontSize: '0.8rem' }} placeholder="<script>...</script>"></textarea></div>
+                                    <SectionHeader icon={Shield} title="Maintenance Mode" description="Temporarily hide the site from the public." />
+                                    <div className="glass-card" style={{ background: '#fffbeb', border: '1px solid #fde68a', padding: '2rem', borderRadius: '2rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                        <label className="flex-between" style={{ cursor: 'pointer' }}>
+                                            <span style={{ fontSize: '1rem', fontWeight: 900, color: '#92400e' }}>ACTIVATE MAINTENANCE MODE</span>
+                                            <input type="checkbox" checked={formData.maintenanceMode} onChange={e => setFormData({ ...formData, maintenanceMode: e.target.checked })} style={{ width: '1.5rem', height: '1.5rem', accentColor: '#92400e' }} />
+                                        </label>
+                                        <p style={{ fontSize: '0.85rem', color: '#b45309', fontWeight: 600 }}>Perfect for when you're making major updates to your shop catalog.</p>
+                                        <div style={fieldRowStyle}><label style={{ ...labelStyle, color: '#92400e' }}>Display Message</label><input type="text" value={formData.maintenanceMessage || ''} onChange={e => setFormData({ ...formData, maintenanceMessage: e.target.value })} style={{ ...inputStyle, background: 'white' }} /></div>
+                                    </div>
+                                </div>
+
+                                <div className="flex-column" style={{ gap: '1.5rem', borderTop: '1px solid rgba(0,0,0,0.05)', paddingTop: '2.5rem' }}>
+                                    <SectionHeader icon={Code} title="Custom CSS & Integration" description="Inject tracking codes or custom styling." />
+                                    <div className="grid-2">
+                                        <div style={fieldRowStyle}><label style={labelStyle}>Custom CSS</label><textarea rows="8" value={formData.customCSS || ''} onChange={e => setFormData({ ...formData, customCSS: e.target.value })} style={{ ...inputStyle, fontFamily: 'monospace', fontSize: '0.8rem' }} placeholder="/* Add your styles here */"></textarea></div>
+                                        <div style={fieldRowStyle}><label style={labelStyle}>Integration Scripts (JS)</label><textarea rows="8" value={formData.customJS || ''} onChange={e => setFormData({ ...formData, customJS: e.target.value })} style={{ ...inputStyle, fontFamily: 'monospace', fontSize: '0.8rem' }} placeholder="<script>...</script>"></textarea></div>
+                                    </div>
                                 </div>
                             </div>
                         )}

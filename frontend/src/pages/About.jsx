@@ -10,31 +10,31 @@ const About = () => {
         <div style={{ background: 'var(--crease)', minHeight: '100vh', padding: '4rem 0 0', overflowX: 'hidden' }}>
             {/* Header */}
             <div className="container" style={{ marginBottom: '4rem' }}>
-                <div className="flex-column" style={{ gap: '1.5rem', maxWidth: '700px' }}>
+                <div className="flex-column" style={{ gap: '2rem', maxWidth: '800px' }}>
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         className="flex"
-                        style={{ alignItems: 'center', gap: '1rem' }}
+                        style={{ alignItems: 'center', gap: '1.2rem' }}
                     >
-                        <div style={{ width: '30px', height: '1px', background: 'var(--gold)' }}></div>
-                        <span className="text-gold" style={{ fontSize: '0.7rem', fontWeight: 800, letterSpacing: '0.3em' }}>ABOUT US</span>
+                        <div style={{ width: '40px', height: '1px', background: 'var(--gold)' }}></div>
+                        <span className="text-gold" style={{ fontSize: '0.75rem', fontWeight: 900, letterSpacing: '0.4em' }}>OUR STORY</span>
                     </motion.div>
 
                     <motion.h1
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.1 }}
-                        style={{ fontSize: 'clamp(2.5rem, 6vw, 4rem)', color: 'var(--charcoal)', lineHeight: 0.95, fontWeight: 900 }}
+                        transition={{ duration: 0.8, delay: 0.1 }}
+                        style={{ fontSize: 'clamp(1.5rem, 6vw, 3.2rem)', color: 'var(--charcoal)', lineHeight: 1.1, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.05em' }}
                     >
                         {settings?.aboutHeroTitle || 'Our Story.'}
                     </motion.h1>
 
                     <motion.p
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2 }}
-                        style={{ fontSize: '1rem', color: 'var(--stone)', lineHeight: 1.8, fontWeight: 500 }}
+                        transition={{ duration: 0.8, delay: 0.2 }}
+                        style={{ fontSize: '1.1rem', color: 'var(--stone)', lineHeight: 1.8, fontWeight: 500, letterSpacing: '0.01em' }}
                     >
                         {settings?.aboutText || 'Premium furniture for modern living spaces. We bring you handpicked, high-quality furniture that makes your home beautiful and comfortable.'}
                     </motion.p>
@@ -59,7 +59,7 @@ const About = () => {
                             />
                         </div>
                         <div className="flex-column" style={{ gap: '1rem', textAlign: 'center', alignItems: 'center' }}>
-                            <h2 style={{ fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', fontWeight: 900 }}>{settings?.aboutSection1Title || 'We Pick the Best for You'}</h2>
+                            <h2 style={{ fontSize: 'clamp(1.6rem, 4vw, 2.2rem)', fontWeight: 900 }}>{settings?.aboutSection1Title || 'We Pick the Best for You'}</h2>
                             <p style={{ fontSize: '0.95rem', color: 'var(--stone)', lineHeight: 1.8, maxWidth: '600px' }}>
                                 {settings?.aboutSection1Text || "We carefully select every piece of furniture we sell. Only items that meet our quality standards make it to our store. Your satisfaction is our top priority."}
                             </p>
@@ -91,7 +91,7 @@ const About = () => {
                             />
                         </div>
                         <div className="flex-column" style={{ gap: '1rem', textAlign: 'center', alignItems: 'center' }}>
-                            <h2 style={{ fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', fontWeight: 900 }}>{settings?.aboutSection2Title || 'Built to Last'}</h2>
+                            <h2 style={{ fontSize: 'clamp(1.6rem, 4vw, 2.2rem)', fontWeight: 900 }}>{settings?.aboutSection2Title || 'Built to Last'}</h2>
                             <p style={{ fontSize: '0.95rem', color: 'var(--stone)', lineHeight: 1.8, maxWidth: '600px' }}>
                                 {settings?.aboutSection2Text || "We use strong, durable materials like seasoned teak wood and high-quality foam. Every piece of furniture is made to be used daily, for years to come."}
                             </p>

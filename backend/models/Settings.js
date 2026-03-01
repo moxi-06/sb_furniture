@@ -84,12 +84,14 @@ const settingsSchema = new mongoose.Schema({
     heroLabel: { type: String, default: 'QUALITY FURNITURE' },
 
     // Quality/Features Section
-    qualityFeatures: { type: String, default: JSON.stringify([
-        { title: 'Strong & Durable', subtitle: 'Made with the best wood and materials that last for years.', icon: 'Shield' },
-        { title: 'Free Delivery', subtitle: 'We deliver to your doorstep with careful handling.', icon: 'Truck' },
-        { title: 'Trusted by 5000+ Families', subtitle: 'Our customers love us. We treat every order with care.', icon: 'HeartHandshake' },
-        { title: 'Easy Returns', subtitle: 'Not satisfied? Return within 7 days, no questions asked.', icon: 'CheckCircle' }
-    ]) },
+    qualityFeatures: {
+        type: String, default: JSON.stringify([
+            { title: 'Strong & Durable', subtitle: 'Made with the best wood and materials that last for years.', icon: 'Shield' },
+            { title: 'Free Delivery', subtitle: 'We deliver to your doorstep with careful handling.', icon: 'Truck' },
+            { title: 'Trusted by 5000+ Families', subtitle: 'Our customers love us. We treat every order with care.', icon: 'HeartHandshake' },
+            { title: 'Easy Returns', subtitle: 'Not satisfied? Return within 7 days, no questions asked.', icon: 'CheckCircle' }
+        ])
+    },
 
     // Products Page
     productsPageTitle: { type: String, default: 'Our Furniture' },
@@ -151,12 +153,29 @@ const settingsSchema = new mongoose.Schema({
     favicon: { url: String, public_id: String },
 
     // Navigation Links
-    navLinks: { type: String, default: JSON.stringify([
-        { name: 'HOME', path: '/' },
-        { name: 'PRODUCTS', path: '/products' },
-        { name: 'ABOUT US', path: '/about' },
-        { name: 'CONTACT', path: '/contact' }
-    ]) }
+    navLinks: {
+        type: String, default: JSON.stringify([
+            { name: 'HOME', path: '/' },
+            { name: 'PRODUCTS', path: '/products' },
+            { name: 'ABOUT US', path: '/about' },
+            { name: 'CONTACT', path: '/contact' }
+        ])
+    },
+
+    // NEW SECTIONS
+    // King of Customization
+    showCustomizationSection: { type: Boolean, default: true },
+    customizationTitle: { type: String, default: 'The King of Customization' },
+    customizationSubtitle: { type: String, default: 'We customize furniture in any way you desire. From wood type to fabric color, handle it all.' },
+    customizationImage: { url: String, public_id: String },
+
+    // Our Customers
+    showCustomersSection: { type: Boolean, default: true },
+    customersSectionTitle: { type: String, default: 'Our Distinguised Customers' },
+    customers: [{
+        name: String,
+        image: { url: String, public_id: String }
+    }]
 });
 
 module.exports = mongoose.model('Settings', settingsSchema);

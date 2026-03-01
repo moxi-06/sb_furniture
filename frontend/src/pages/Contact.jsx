@@ -17,31 +17,31 @@ const Contact = () => {
         <div style={{ background: 'var(--crease)', minHeight: '100vh', padding: '4rem 0 0', overflowX: 'hidden' }}>
             {/* Header */}
             <div className="container" style={{ marginBottom: '3rem' }}>
-                <div className="flex-column" style={{ gap: '1.5rem', maxWidth: '600px' }}>
+                <div className="flex-column" style={{ gap: '2rem', maxWidth: '800px' }}>
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         className="flex"
-                        style={{ alignItems: 'center', gap: '1rem' }}
+                        style={{ alignItems: 'center', gap: '1.2rem' }}
                     >
-                        <div style={{ width: '30px', height: '1px', background: 'var(--gold)' }}></div>
-                        <span className="text-gold" style={{ fontSize: '0.7rem', fontWeight: 800, letterSpacing: '0.3em' }}>REACH OUT</span>
+                        <div style={{ width: '40px', height: '1px', background: 'var(--gold)' }}></div>
+                        <span className="text-gold" style={{ fontSize: '0.75rem', fontWeight: 900, letterSpacing: '0.4em' }}>REACH OUT</span>
                     </motion.div>
 
                     <motion.h1
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.1 }}
-                        style={{ fontSize: 'clamp(2.5rem, 6vw, 4rem)', color: 'var(--charcoal)', lineHeight: 0.95, fontWeight: 900 }}
+                        transition={{ duration: 0.8, delay: 0.1 }}
+                        style={{ fontSize: 'clamp(1.5rem, 6vw, 3.2rem)', color: 'var(--charcoal)', lineHeight: 1.1, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.05em' }}
                     >
                         {settings?.contactHeroTitle || 'Contact Us'}
                     </motion.h1>
 
                     <motion.p
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2 }}
-                        style={{ fontSize: '1rem', color: 'var(--stone)', lineHeight: 1.7, fontWeight: 500 }}
+                        transition={{ duration: 0.8, delay: 0.2 }}
+                        style={{ fontSize: '1.1rem', color: 'var(--stone)', lineHeight: 1.8, fontWeight: 500, letterSpacing: '0.01em' }}
                     >
                         {settings?.contactHeroSubtitle || "Have a question about our furniture? Want to place an order? We're happy to help. Call, WhatsApp, or email us anytime."}
                     </motion.p>
@@ -57,29 +57,33 @@ const Contact = () => {
                             href={item.href}
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.5, delay: idx * 0.1 }}
-                            className="glass-card flex-column"
+                            whileHover={{ y: -8, boxShadow: 'var(--shadow-luxury)' }}
+                            transition={{ duration: 0.6, delay: idx * 0.1 }}
                             style={{
-                                padding: '2rem',
+                                padding: '2.5rem 2rem',
                                 background: 'white',
-                                borderRadius: '1.5rem',
-                                gap: '1.25rem',
+                                borderRadius: '2.5rem',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: '1.5rem',
                                 textDecoration: 'none',
-                                border: '1px solid rgba(0,0,0,0.03)',
                                 textAlign: 'center',
-                                alignItems: 'center'
+                                alignItems: 'center',
+                                boxShadow: 'var(--shadow-md)',
+                                border: '1px solid rgba(0,0,0,0.02)',
+                                transition: 'var(--transition-slow)'
                             }}
                         >
-                            <div className="flex-center" style={{ width: '3.5rem', height: '3.5rem', borderRadius: '1.25rem', background: 'rgba(212,175,55,0.08)', color: 'var(--gold)' }}>
-                                <item.icon size={22} />
+                            <div className="flex-center" style={{ width: '4rem', height: '4rem', borderRadius: '1.5rem', background: 'rgba(212,175,55,0.06)', color: 'var(--gold)' }}>
+                                <item.icon size={26} strokeWidth={1.5} />
                             </div>
-                            <div className="flex-column" style={{ gap: '0.25rem' }}>
-                                <span style={{ fontSize: '0.65rem', fontWeight: 800, color: 'var(--gold)', letterSpacing: '0.3em' }}>{item.label}</span>
-                                <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--charcoal)' }}>{item.value}</h3>
+                            <div className="flex-column" style={{ gap: '0.5rem' }}>
+                                <span style={{ fontSize: '0.7rem', fontWeight: 900, color: 'var(--gold)', letterSpacing: '0.2em' }}>{item.label}</span>
+                                <h3 style={{ fontSize: '1.2rem', fontWeight: 900, color: 'var(--charcoal)' }}>{item.value}</h3>
                             </div>
-                            <div className="flex" style={{ gap: '0.5rem', alignItems: 'center', opacity: 0.3 }}>
-                                <span style={{ fontSize: '0.7rem', fontWeight: 800 }}>Tap to connect</span>
-                                <ExternalLink size={12} />
+                            <div className="flex" style={{ gap: '0.5rem', alignItems: 'center', opacity: 0.4 }}>
+                                <span style={{ fontSize: '0.75rem', fontWeight: 700 }}>Tap to connect</span>
+                                <ExternalLink size={14} />
                             </div>
                         </motion.a>
                     ))}
@@ -94,7 +98,7 @@ const Contact = () => {
                     >
                         <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
                             <span className="text-gold" style={{ fontSize: '0.75rem', letterSpacing: '0.4em' }}>LEARN MORE</span>
-                            <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', marginTop: '0.75rem', fontWeight: 900 }}>Common Questions</h2>
+                            <h2 style={{ fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', marginTop: '0.75rem', fontWeight: 900 }}>Common Questions</h2>
                         </div>
                         <div className="flex-column" style={{ gap: '1rem', maxWidth: '800px', margin: '0 auto' }}>
                             {settings.faqs.map((faq, idx) => (

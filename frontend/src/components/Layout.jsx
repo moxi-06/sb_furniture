@@ -9,6 +9,38 @@ const Layout = ({ children }) => {
     const { settings } = useSettings();
 
     useEffect(() => {
+        // Inject SEO Meta Tags
+        if (settings) {
+            document.title = settings.siteTitle || 'Sai Balaji Furniture';
+
+            let metaDesc = document.querySelector('meta[name="description"]');
+            if (!metaDesc) {
+                metaDesc = document.createElement('meta');
+                metaDesc.name = 'description';
+                document.head.appendChild(metaDesc);
+            }
+            metaDesc.content = settings.siteMetaDescription || 'Premium furniture for modern living spaces.';
+
+            let metaKeywords = document.querySelector('meta[name="keywords"]');
+            if (!metaKeywords) {
+                metaKeywords = document.createElement('meta');
+                metaKeywords.name = 'keywords';
+                document.head.appendChild(metaKeywords);
+            }
+            metaKeywords.content = settings.siteKeywords || 'furniture, wooden, custom, madhavaram';
+
+            // Favicon
+            if (settings.favicon?.url) {
+                let link = document.querySelector("link[rel~='icon']");
+                if (!link) {
+                    link = document.createElement('link');
+                    link.rel = 'icon';
+                    document.head.appendChild(link);
+                }
+                link.href = settings.favicon.url;
+            }
+        }
+
         // Inject Custom JS if present
         if (settings?.customJS) {
             const script = document.createElement('script');
@@ -20,7 +52,7 @@ const Layout = ({ children }) => {
                 if (oldScript) oldScript.remove();
             };
         }
-    }, [settings?.customJS]);
+    }, [settings]);
 
     return (
         <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--crease)' }}>

@@ -55,39 +55,56 @@ const Products = () => {
     return (
         <div style={{ background: 'var(--crease)', minHeight: '100vh', paddingBottom: '4rem', overflowX: 'hidden' }}>
             {/* Header */}
-            <header style={{ padding: '4rem 0 3rem' }}>
-                <div className="container flex-column" style={{ gap: '2rem', position: 'relative', zIndex: 10 }}>
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="flex-column"
-                        style={{ gap: '1rem' }}
-                    >
-                        <div className="flex" style={{ alignItems: 'center', gap: '1rem' }}>
-                            <div style={{ width: '30px', height: '1px', background: 'var(--gold)' }}></div>
-                            <span className="text-gold" style={{ fontSize: '0.7rem', letterSpacing: '0.3em' }}>{settings?.productsPageLabel || 'ALL PRODUCTS'}</span>
-                        </div>
-                        <h1 style={{ fontSize: 'clamp(2.5rem, 6vw, 4rem)', color: 'var(--charcoal)', lineHeight: 0.95, fontWeight: 900 }}>
+            <header style={{ padding: '6rem 0 4rem' }}>
+                <div className="container flex-column" style={{ gap: '2.5rem', position: 'relative', zIndex: 10 }}>
+                    <div className="flex-column" style={{ gap: '2rem', maxWidth: '800px' }}>
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="flex"
+                            style={{ alignItems: 'center', gap: '1.2rem' }}
+                        >
+                            <div style={{ width: '40px', height: '1px', background: 'var(--gold)' }}></div>
+                            <span className="text-gold" style={{ fontSize: '0.75rem', fontWeight: 900, letterSpacing: '0.4em' }}>{settings?.productsPageLabel || 'ALL PRODUCTS'}</span>
+                        </motion.div>
+
+                        <motion.h1
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: 0.1 }}
+                            style={{ fontSize: 'clamp(1.5rem, 6vw, 3.2rem)', color: 'var(--charcoal)', lineHeight: 1.1, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.05em' }}
+                        >
                             {settings?.productsPageTitle || 'Our Furniture'}
-                        </h1>
-                    </motion.div>
+                        </motion.h1>
+
+                        <motion.p
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: 0.2 }}
+                            style={{ fontSize: '1.1rem', color: 'var(--stone)', lineHeight: 1.8, fontWeight: 500, letterSpacing: '0.01em' }}
+                        >
+                            {settings?.productsPageDescription || 'Explore our curated collection of premium furniture, designed to elevate your living spaces with style and comfort. Find the perfect pieces to complement your home.'}
+                        </motion.p>
+                    </div>
 
                     <motion.form
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.15 }}
+                        transition={{ delay: 0.2, duration: 0.8 }}
                         onSubmit={handleSearch}
-                        className="glass"
                         style={{
-                            padding: '0.75rem 1.5rem',
-                            borderRadius: '2rem',
-                            maxWidth: '500px',
+                            padding: '1rem 2rem',
+                            borderRadius: '3rem',
+                            background: 'white',
+                            maxWidth: '600px',
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '1rem'
+                            gap: '1.5rem',
+                            boxShadow: 'var(--shadow-md)',
+                            border: '1px solid rgba(0,0,0,0.04)'
                         }}
                     >
-                        <Search size={18} style={{ opacity: 0.3, color: 'var(--stone)' }} />
+                        <Search size={22} style={{ opacity: 0.2, color: 'var(--stone)' }} />
                         <input
                             type="text"
                             placeholder={settings?.productsSearchPlaceholder || 'Search furniture...'}
@@ -96,15 +113,16 @@ const Products = () => {
                             style={{
                                 background: 'transparent',
                                 border: 'none',
-                                fontSize: '0.9rem',
+                                fontSize: '1rem',
                                 fontWeight: 500,
                                 width: '100%',
                                 outline: 'none',
-                                color: 'var(--charcoal)'
+                                color: 'var(--charcoal)',
+                                letterSpacing: '0.01em'
                             }}
                         />
-                        <button type="submit" className="flex-center" style={{ background: 'var(--charcoal)', color: 'white', width: '2.5rem', height: '2.5rem', borderRadius: '50%', flexShrink: 0 }}>
-                            <ArrowRight size={14} />
+                        <button type="submit" className="flex-center gold-gradient" style={{ width: '3rem', height: '3rem', borderRadius: '50%', color: 'white', flexShrink: 0, boxShadow: '0 10px 20px rgba(212,175,55,0.2)' }}>
+                            <ArrowRight size={18} />
                         </button>
                     </motion.form>
                 </div>
