@@ -18,7 +18,9 @@ const getSettings = async (req, res) => {
 const updateSettings = async (req, res) => {
     try {
         let settings = await Settings.findOne();
-        if (!settings) settings = new Settings({});
+        if (!settings) {
+            settings = new Settings({});
+        }
 
         const fields = req.body;
 
@@ -66,4 +68,34 @@ const updateSettings = async (req, res) => {
     }
 };
 
-module.exports = { getSettings, updateSettings };
+// Delete image from settings
+const deleteSettingImage = async (req, res) => {
+    try {
+        const { field } = req.params;
+        const validFields = ['logo', 'heroImage', 'promoPopupImage', 'favicon'];
+        
+        if (!validFields.includes(field)) {
+            return res.status(400).json({ message: 'Invalid image field' });
+        }
+
+        let settings = await Settings.findOne();
+        if (!settings) return res.status(404).json({ message: 'Settings not found' });
+
+        if (settings[field] && settings[field].public_id) {
+            try {
+                await cloudinary.uploader.destroy(settings[field].public_id);
+            } catch (err) {
+                console.error('Error deleting image from Cloudinary:', err);
+            }
+            settings[field] = { url: '', public_id: '' };
+            await settings.save();
+            res.json(settings);
+        } else {
+            res.status(400).json({ message: 'No image to delete' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+module.exports = { getSettings, updateSettings, deleteSettingImage };

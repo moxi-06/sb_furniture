@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+=======
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+>>>>>>> 482aabe962b5c854ef4da8fe5a3d3f3f33bf9d08
 import { SettingsProvider, useSettings } from './context/SettingsContext';
 import { AuthProvider } from './context/AuthContext';
 import Layout from './components/Layout';
@@ -22,9 +27,26 @@ import AdminDashboard from './pages/admin/Dashboard';
 import AdminProducts from './pages/admin/AdminProducts';
 import AdminSettings from './pages/admin/AdminSettings';
 
-// Helper component to handle maintenance logic
+// Helper component to handle favicon and maintenance logic
 const CustomerRoutes = () => {
+<<<<<<< HEAD
   const { settings, loading } = useSettings();
+=======
+  const { settings } = useSettings();
+
+  useEffect(() => {
+    if (settings?.favicon?.url) {
+      const link = document.querySelector("link[rel~='icon']") || document.createElement('link');
+      link.rel = 'icon';
+      link.href = settings.favicon.url;
+      document.head.appendChild(link);
+    }
+    if (settings?.siteTitle) {
+      document.title = settings.siteTitle;
+    }
+  }, [settings?.favicon, settings?.siteTitle]);
+
+>>>>>>> 482aabe962b5c854ef4da8fe5a3d3f3f33bf9d08
   const isAdmin = localStorage.getItem('adminToken');
 
   return (

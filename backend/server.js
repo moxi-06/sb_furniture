@@ -7,7 +7,26 @@ const app = express();
 
 // Middleware
 app.use(express.json());
-app.use(cors());
+const corsOptions = {
+    origin: (origin, callback) => {
+        const allowedOrigins = [
+            'http://localhost:5173',
+            'http://localhost:3000',
+            'https://sb-furniture-frontend.vercel.app',
+            'https://sb-furniture-frontend.vercel.app/',
+            'https://sb-furniture.vercel.app',
+            'https://sb-furniture.vercel.app/'
+        ];
+        
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, origin);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true
+};
+app.use(cors(corsOptions));
 
 // Database Connection
 mongoose.connect(process.env.MONGO_URI)
