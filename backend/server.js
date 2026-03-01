@@ -15,9 +15,11 @@ const corsOptions = {
             'https://sb-furniture-frontend.vercel.app',
             'https://sb-furniture-frontend.vercel.app/',
             'https://sb-furniture.vercel.app',
-            'https://sb-furniture.vercel.app/'
+            'https://sb-furniture.vercel.app/',
+            'https://sb-furniture-new-frontend.vercel.app',
+            'https://sb-furniture-new-frontend.vercel.app/'
         ];
-        
+
         if (!origin || allowedOrigins.includes(origin)) {
             callback(null, origin);
         } else {
