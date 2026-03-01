@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-=======
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
->>>>>>> 482aabe962b5c854ef4da8fe5a3d3f3f33bf9d08
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { SettingsProvider, useSettings } from './context/SettingsContext';
 import { AuthProvider } from './context/AuthContext';
 import Layout from './components/Layout';
@@ -29,10 +24,7 @@ import AdminSettings from './pages/admin/AdminSettings';
 
 // Helper component to handle favicon and maintenance logic
 const CustomerRoutes = () => {
-<<<<<<< HEAD
   const { settings, loading } = useSettings();
-=======
-  const { settings } = useSettings();
 
   useEffect(() => {
     if (settings?.favicon?.url) {
@@ -46,7 +38,6 @@ const CustomerRoutes = () => {
     }
   }, [settings?.favicon, settings?.siteTitle]);
 
->>>>>>> 482aabe962b5c854ef4da8fe5a3d3f3f33bf9d08
   const isAdmin = localStorage.getItem('adminToken');
 
   return (
