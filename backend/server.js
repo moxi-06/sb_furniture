@@ -7,28 +7,28 @@ const app = express();
 
 // Middleware
 app.use(express.json());
-const corsOptions = {
-    origin: (origin, callback) => {
-        const allowedOrigins = [
-            'http://localhost:5173',
-            'http://localhost:3000',
-            'https://sb-furniture-frontend.vercel.app',
-            'https://sb-furniture-frontend.vercel.app/',
-            'https://sb-furniture.vercel.app',
-            'https://sb-furniture.vercel.app/',
-            'https://sb-furniture-new-frontend.vercel.app',
-            'https://sb-furniture-new-frontend.vercel.app/'
-        ];
 
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, origin);
+const allowedOrigins = [
+    'http://localhost:5173',
+    'http://localhost:3000',
+    'https://sb-furniture-frontend.vercel.app',
+    'https://sb-furniture.vercel.app',
+    'https://sb-furniture-new-frontend.vercel.app'
+];
+
+app.use(cors({
+    origin: (origin, callback) => {
+        if (!origin) return callback(null, true);
+        const normalizedOrigin = origin.replace(/\/$/, '');
+        if (allowedOrigins.some(o => o.replace(/\/$/, '') === normalizedOrigin)) {
+            callback(null, true);
         } else {
             callback(new Error('Not allowed by CORS'));
         }
     },
-    credentials: true
-};
-app.use(cors(corsOptions));
+    credentials: true,
+    optionsSuccessStatus: 200
+}));
 
 // Database Connection
 mongoose.connect(process.env.MONGO_URI)
@@ -39,6 +39,14 @@ mongoose.connect(process.env.MONGO_URI)
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/products', require('./routes/productRoutes'));
 app.use('/api/settings', require('./routes/settingsRoutes'));
+
+// Global Error Handler
+app.use((err, req, res, next) => {
+    console.error('Server Error:', err);
+    res.status(err.status || 500).json({
+        message: err.message || 'Internal Server Error'
+    });
+});
 
 // Vercel serverless export
 module.exports = app;
