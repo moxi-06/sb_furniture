@@ -28,7 +28,11 @@ const updateSettings = async (req, res) => {
         const handleImage = async (fieldName) => {
             if (req.files && req.files[fieldName]) {
                 if (settings[fieldName] && settings[fieldName].public_id) {
-                    await cloudinary.uploader.destroy(settings[fieldName].public_id);
+                    try {
+                        await cloudinary.uploader.destroy(settings[fieldName].public_id);
+                    } catch (err) {
+                        console.error(`Error destroying old ${fieldName}:`, err);
+                    }
                 }
                 settings[fieldName] = {
                     url: req.files[fieldName][0].path,
@@ -41,9 +45,10 @@ const updateSettings = async (req, res) => {
         await handleImage('heroImage');
         await handleImage('promoPopupImage');
         await handleImage('favicon');
+        await handleImage('customizationImage');
 
         // Update other fields
-        const jsonFields = ['socialLinks', 'testimonials', 'faqs', 'promoPopup'];
+        const jsonFields = ['socialLinks', 'testimonials', 'faqs', 'promoPopup', 'customers'];
 
         Object.keys(fields).forEach(key => {
             if (jsonFields.includes(key)) {
@@ -52,7 +57,7 @@ const updateSettings = async (req, res) => {
                 } catch (e) {
                     console.error(`Error parsing ${key}:`, e);
                 }
-            } else if (!['logo', 'heroImage', 'promoPopupImage', 'favicon'].includes(key)) {
+            } else if (!['logo', 'heroImage', 'promoPopupImage', 'favicon', 'customizationImage'].includes(key)) {
                 // Convert string booleans to actual booleans
                 if (fields[key] === 'true') settings[key] = true;
                 else if (fields[key] === 'false') settings[key] = false;
@@ -64,7 +69,10 @@ const updateSettings = async (req, res) => {
         res.json(updatedSettings);
     } catch (error) {
         console.error('Update settings error:', error);
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            message: error.message,
+            stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+        });
     }
 };
 
@@ -73,7 +81,7 @@ const deleteSettingImage = async (req, res) => {
     try {
         const { field } = req.params;
         const validFields = ['logo', 'heroImage', 'promoPopupImage', 'favicon'];
-        
+
         if (!validFields.includes(field)) {
             return res.status(400).json({ message: 'Invalid image field' });
         }

@@ -9,7 +9,8 @@ router.put('/', protect, upload.fields([
     { name: 'logo', maxCount: 1 },
     { name: 'heroImage', maxCount: 1 },
     { name: 'promoPopupImage', maxCount: 1 },
-    { name: 'favicon', maxCount: 1 }
+    { name: 'favicon', maxCount: 1 },
+    { name: 'customizationImage', maxCount: 1 }
 ]), updateSettings);
 router.delete('/image/:field', protect, deleteSettingImage);
 
