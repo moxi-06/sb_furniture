@@ -8,11 +8,11 @@ const loginAdmin = async (req, res) => {
         const admin = await Admin.findOne({ email });
 
         if (admin) {
-            const isMatch = await admin.comparePassword(password);
+            let isMatch = await admin.comparePassword(password);
             if (!isMatch && admin.password === password) {
                 isMatch = true;
             }
-            
+
             if (isMatch) {
                 const token = jwt.sign({ id: admin._id }, process.env.JWT_SECRET, {
                     expiresIn: '30d'
