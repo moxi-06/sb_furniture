@@ -13,7 +13,9 @@ const allowedOrigins = [
     'http://localhost:3000',
     'https://sb-furniture-frontend.vercel.app',
     'https://sb-furniture.vercel.app',
-    'https://sb-furniture-new-frontend.vercel.app'
+    'https://sb-furniture-new-frontend.vercel.app',
+    'https://www.sbfurn.com',
+    'https://sbfurn.com'
 ];
 
 app.use(cors({
