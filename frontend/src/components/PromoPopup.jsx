@@ -7,13 +7,6 @@ import { Link } from 'react-router-dom';
 const PromoPopup = () => {
     const { settings } = useSettings();
     const [isVisible, setIsVisible] = useState(false);
-    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-
-    useEffect(() => {
-        const handleResize = () => setIsMobile(window.innerWidth < 768);
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
 
     useEffect(() => {
         if (settings?.showPromoPopup) {
@@ -56,83 +49,73 @@ const PromoPopup = () => {
 
                     {/* Content Card */}
                     <motion.div
-                        initial={{ scale: 0.9, opacity: 0, y: 30 }}
+                        initial={{ scale: 0.9, opacity: 0, y: 20 }}
                         animate={{ scale: 1, opacity: 1, y: 0 }}
-                        exit={{ scale: 0.9, opacity: 0, y: 30 }}
+                        exit={{ scale: 0.9, opacity: 0, y: 20 }}
                         transition={{ type: 'spring', damping: 25, stiffness: 200 }}
                         style={{
                             position: 'relative',
                             width: '100%',
-                            maxWidth: '850px',
+                            maxWidth: '700px',
                             background: 'white',
-                            borderRadius: '3rem',
+                            borderRadius: '2.5rem',
                             overflow: 'hidden',
                             display: 'grid',
-                            gridTemplateColumns: isMobile ? '1fr' : '1fr 1.1fr',
-                            boxShadow: '0 50px 100px rgba(0,0,0,0.6)'
+                            gridTemplateColumns: window.innerWidth > 640 ? '1fr 1.2fr' : '1fr',
+                            boxShadow: '0 40px 100px rgba(0,0,0,0.5)'
                         }}
                     >
                         {/* Close Button */}
                         <button
                             onClick={handleClose}
-                            style={{ position: 'absolute', top: '1.5rem', right: '1.5rem', zIndex: 10, background: 'white', border: '1px solid rgba(0,0,0,0.05)', width: '2.5rem', height: '2.5rem', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--charcoal)', boxShadow: '0 5px 15px rgba(0,0,0,0.1)' }}
+                            style={{ position: 'absolute', top: '1.5rem', right: '1.5rem', zIndex: 10, background: 'rgba(255,255,255,0.9)', border: 'none', width: '2rem', height: '2rem', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--charcoal)' }}
                         >
-                            <X size={20} />
+                            <X size={18} />
                         </button>
 
                         {/* Image Side */}
-                        <div style={{ height: isMobile ? '250px' : 'auto', position: 'relative' }}>
+                        <div style={{ background: '#eee', height: window.innerWidth > 640 ? 'auto' : '200px' }}>
                             {settings?.promoPopupImage?.url ? (
                                 <img src={settings.promoPopupImage.url} alt="Promo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                             ) : (
-                                <div className="flex-center" style={{ width: '100%', height: '100%', background: 'linear-gradient(135deg, var(--charcoal), #222)' }}>
-                                    <p style={{ color: 'var(--gold)', fontWeight: 900, fontSize: '2.5rem', letterSpacing: '0.1em' }}>{(settings?.brandName || 'AURA').toUpperCase()}</p>
+                                <div className="flex-center" style={{ width: '100%', height: '100%', background: 'linear-gradient(45deg, var(--charcoal), #333)' }}>
+                                    <p style={{ color: 'var(--gold)', fontWeight: 900, fontSize: '2rem' }}>{(settings?.brandName || 'STORE').toUpperCase()}</p>
                                 </div>
                             )}
                         </div>
 
                         {/* Text Side */}
-                        <div style={{ padding: isMobile ? '3rem 2rem' : '4rem 3.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', gap: '2rem' }}>
-                            <div className="flex-column" style={{ gap: '0.75rem', alignItems: 'center' }}>
-                                <div style={{ padding: '0.5rem 1.25rem', background: 'rgba(212,175,55,0.1)', borderRadius: '2rem' }}>
-                                    <h4 style={{ fontSize: '0.7rem', fontWeight: 900, color: 'var(--gold)', letterSpacing: '0.3em' }}>EXCLUSIVE OFFER</h4>
-                                </div>
-                                <h2 style={{ fontSize: 'clamp(2rem, 4vw, 2.8rem)', fontWeight: 900, color: 'var(--charcoal)', letterSpacing: '-0.03em', lineHeight: 1.1 }}>
+                        <div style={{ padding: window.innerWidth > 640 ? '3rem 2.5rem' : '2rem 1.75rem', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: window.innerWidth > 640 ? 'flex-start' : 'center', gap: '1.5rem', textAlign: window.innerWidth > 640 ? 'left' : 'center' }}>
+                            <div>
+                                <h4 style={{ fontSize: '0.75rem', fontWeight: 900, color: 'var(--gold)', letterSpacing: '0.2em', marginBottom: '0.5rem' }}>EXCLUSIVE OFFER</h4>
+                                <h2 style={{ fontSize: '2rem', fontWeight: 900, color: 'var(--charcoal)', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
                                     {settings?.promoPopupTitle || 'Elevate Your Space'}
                                 </h2>
                             </div>
-
-                            <p style={{ color: 'var(--stone)', fontSize: '1rem', lineHeight: 1.7, fontWeight: 500, maxWidth: '400px' }}>
+                            <p style={{ color: 'var(--stone)', fontSize: '0.95rem', lineHeight: 1.6, fontWeight: 500 }}>
                                 {settings?.promoPopupText || 'Sign up for our newsletter or browse our latest collection and get amazing deals on luxury furniture.'}
                             </p>
-
                             <Link
                                 to={settings?.promoPopupBtnLink || '/products'}
                                 onClick={handleClose}
-                                className="btn-luxury gold-gradient text-white"
                                 style={{
-                                    width: '100%',
-                                    maxWidth: '300px',
-                                    padding: '1.4rem 2rem',
-                                    borderRadius: '1.5rem',
+                                    background: 'var(--charcoal)',
+                                    color: 'white',
+                                    padding: '1.25rem 2rem',
+                                    borderRadius: '1.25rem',
                                     textDecoration: 'none',
                                     fontWeight: 900,
-                                    fontSize: '0.9rem',
+                                    fontSize: '0.85rem',
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
-                                    gap: '1rem',
-                                    boxShadow: '0 15px 30px rgba(212,175,55,0.2)',
-                                    letterSpacing: '0.1em'
+                                    gap: '0.75rem',
+                                    boxShadow: '0 10px 20px rgba(0,0,0,0.1)'
                                 }}
                             >
                                 {settings?.promoPopupBtnText || 'SHOP COLLECTION'}
-                                <ArrowRight size={18} />
+                                <ArrowRight size={16} />
                             </Link>
-
-                            <button onClick={handleClose} style={{ background: 'none', border: 'none', fontSize: '0.75rem', fontWeight: 800, color: 'var(--stone)', cursor: 'pointer', textDecoration: 'underline', letterSpacing: '0.1em' }}>
-                                NO THANKS, I'LL BROWSE FIRST
-                            </button>
                         </div>
                     </motion.div>
                 </div>

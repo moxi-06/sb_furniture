@@ -175,7 +175,7 @@ const Home = () => {
                     maxHeight: isMobile ? 'none' : '1000px',
                     display: 'flex',
                     alignItems: 'center',
-                    padding: isMobile ? '6rem 0' : '4rem 0'
+                    padding: isMobile ? '7rem 1.5rem' : '4rem 0'
                 }}>
                     {/* Blueprint/Tech Drawing Background Pattern */}
                     {!isMobile ? (
@@ -200,11 +200,11 @@ const Home = () => {
                         </>
                     )}
 
-                    <div className="container" style={{ position: 'relative', zIndex: 1 }}>
+                    <div className="container" style={{ position: 'relative', zIndex: 1, width: '100%', boxSizing: 'border-box', padding: isMobile ? '0' : '0 2rem' }}>
                         <div style={{
                             display: 'grid',
                             gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(350px, 1fr))',
-                            gap: isMobile ? '3rem' : 'clamp(2rem, 5vw, 5rem)',
+                            gap: isMobile ? '2.5rem' : 'clamp(2rem, 5vw, 5rem)',
                             alignItems: 'center',
                             textAlign: isMobile ? 'center' : 'left'
                         }}>
@@ -214,7 +214,7 @@ const Home = () => {
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.8 }}
                             >
-                                <div style={{ marginBottom: '3rem' }}>
+                                <div style={{ marginBottom: '2.5rem' }}>
                                     <motion.div
                                         initial={{ opacity: 0, x: -20 }}
                                         whileInView={{ opacity: 1, x: 0 }}
@@ -225,23 +225,23 @@ const Home = () => {
                                         <span className="text-gold" style={{ fontSize: '0.8rem', letterSpacing: '0.6em', fontWeight: 900 }}>BESPOKE CRAFTSMANSHIP</span>
                                     </motion.div>
                                     <h2 style={{
-                                        fontSize: 'clamp(2rem, 6vw, 3.5rem)',
-                                        lineHeight: 1.05,
+                                        fontSize: 'clamp(1.8rem, 6vw, 3.5rem)',
+                                        lineHeight: 1.1,
                                         fontWeight: 900,
                                         color: isMobile ? 'white' : 'var(--charcoal)',
-                                        marginBottom: '1.8rem',
+                                        marginBottom: '1.2rem',
                                         textTransform: 'uppercase'
                                     }}>
                                         {settings?.customizationTitle || 'The King of Customization'}
                                     </h2>
                                     <p style={{
-                                        fontSize: '1.1rem',
-                                        color: isMobile ? 'rgba(255,255,255,0.8)' : 'var(--stone)',
+                                        fontSize: isMobile ? '0.95rem' : '1.1rem',
+                                        color: isMobile ? 'rgba(255,255,255,0.85)' : 'var(--stone)',
                                         lineHeight: 1.8,
                                         fontWeight: 500,
-                                        maxWidth: isMobile ? '100%' : '550px',
-                                        marginLeft: isMobile ? 'auto' : '0',
-                                        marginRight: isMobile ? 'auto' : '0',
+                                        maxWidth: isMobile ? '480px' : '550px',
+                                        marginLeft: 'auto',
+                                        marginRight: 'auto',
                                         letterSpacing: '0.01em'
                                     }}>
                                         {settings?.customizationSubtitle || 'Your vision, our mastery. Every curve, fabric, and finish tailored to your unique lifestyle.'}
@@ -250,16 +250,16 @@ const Home = () => {
 
                                 <div style={{
                                     display: 'grid',
-                                    gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)',
-                                    gap: isMobile ? '2rem' : '1.5rem',
-                                    marginBottom: '5rem', // Added more space below the grid
-                                    width: isMobile ? '100%' : '500px'
+                                    gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(2, 200px)',
+                                    gap: isMobile ? '1rem' : '1.5rem',
+                                    marginBottom: '2.5rem',
+                                    justifyContent: isMobile ? 'center' : 'flex-start'
                                 }}>
                                     {[
-                                        { icon: Paintbrush, label: 'Custom Palette', y: 0, desc: 'Any color you imagine' },
-                                        { icon: Layers, label: 'Premium Fabrics', y: 30, desc: 'Velvet, Leather & Linen' },
-                                        { icon: Maximize, label: 'Perfect Fit', y: -20, desc: 'Dimensions for your space' },
-                                        { icon: Sparkles, label: 'Concept Design', y: 10, desc: 'Unique shapes & forms' }
+                                        { icon: Paintbrush, label: 'Custom Palette', y: 0 },
+                                        { icon: Layers, label: 'Premium Fabrics', y: 30 },
+                                        { icon: Maximize, label: 'Perfect Fit', y: -20 },
+                                        { icon: Sparkles, label: 'Concept Design', y: 10 }
                                     ].map((opt, i) => (
                                         <motion.div
                                             key={i}
@@ -278,36 +278,34 @@ const Home = () => {
                                                 display: 'flex',
                                                 flexDirection: 'column',
                                                 alignItems: 'center',
-                                                gap: '1rem',
+                                                gap: '1.2rem',
                                                 cursor: 'pointer'
                                             }}
                                         >
                                             <div style={{ width: '3.5rem', height: '3.5rem', borderRadius: '1.25rem', background: 'rgba(212,175,55,0.06)', color: 'var(--gold)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                                 <opt.icon size={22} strokeWidth={1.2} />
                                             </div>
-                                            <div style={{ textAlign: 'center' }}>
-                                                <span style={{ fontSize: '0.7rem', fontWeight: 900, color: isMobile ? 'white' : 'var(--charcoal)', letterSpacing: '0.2em', textTransform: 'uppercase' }}>{opt.label}</span>
-                                                <p style={{ fontSize: '0.65rem', color: isMobile ? 'rgba(255,255,255,0.6)' : 'var(--stone)', marginTop: '0.4rem', fontWeight: 600 }}>{opt.desc}</p>
-                                            </div>
+                                            <span style={{ fontSize: '0.7rem', fontWeight: 900, color: isMobile ? 'white' : 'var(--charcoal)', letterSpacing: '0.2em', textTransform: 'uppercase', textAlign: 'center' }}>{opt.label}</span>
                                         </motion.div>
                                     ))}
                                 </div>
 
-                                <div className="flex" style={{ gap: '2rem', flexWrap: 'wrap', justifyContent: isMobile ? 'center' : 'flex-start' }}>
+                                <div className="flex" style={{ gap: '1.5rem', flexWrap: 'wrap', justifyContent: isMobile ? 'center' : 'flex-start', marginTop: '0.5rem' }}>
                                     <motion.a
-                                        href={`https://wa.me/${(settings?.whatsappNumber || '').replace(/\D/g, '') || settings?.contactPhone?.replace(/\D/g, '')}`}
+                                        href={`https://wa.me/${settings?.whatsappNumber}?text=${encodeURIComponent('Hi! I would like to enquire about custom furniture.')}`}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="btn-luxury gold-gradient text-white"
                                         style={{
-                                            padding: '1.4rem 4rem',
-                                            fontSize: '0.9rem',
+                                            padding: '1.2rem 2.5rem',
+                                            fontSize: '0.8rem',
                                             fontWeight: 900,
                                             borderRadius: '1.5rem',
                                             boxShadow: '0 15px 30px rgba(212,175,55,0.3)',
                                             position: 'relative',
                                             overflow: 'hidden',
-                                            letterSpacing: '0.1em'
+                                            display: 'inline-block',
+                                            textDecoration: 'none'
                                         }}
                                         whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.95 }}
