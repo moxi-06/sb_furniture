@@ -250,15 +250,16 @@ const Home = () => {
 
                                 <div style={{
                                     display: 'grid',
-                                    gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(2, 220px)',
-                                    gap: '1.5rem',
-                                    marginBottom: '4rem'
+                                    gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)',
+                                    gap: isMobile ? '2rem' : '1.5rem',
+                                    marginBottom: '5rem', // Added more space below the grid
+                                    width: isMobile ? '100%' : '500px'
                                 }}>
                                     {[
-                                        { icon: Paintbrush, label: 'Custom Palette', y: 0 },
-                                        { icon: Layers, label: 'Premium Fabrics', y: 30 },
-                                        { icon: Maximize, label: 'Perfect Fit', y: -20 },
-                                        { icon: Sparkles, label: 'Concept Design', y: 10 }
+                                        { icon: Paintbrush, label: 'Custom Palette', y: 0, desc: 'Any color you imagine' },
+                                        { icon: Layers, label: 'Premium Fabrics', y: 30, desc: 'Velvet, Leather & Linen' },
+                                        { icon: Maximize, label: 'Perfect Fit', y: -20, desc: 'Dimensions for your space' },
+                                        { icon: Sparkles, label: 'Concept Design', y: 10, desc: 'Unique shapes & forms' }
                                     ].map((opt, i) => (
                                         <motion.div
                                             key={i}
@@ -277,32 +278,36 @@ const Home = () => {
                                                 display: 'flex',
                                                 flexDirection: 'column',
                                                 alignItems: 'center',
-                                                gap: '1.2rem',
+                                                gap: '1rem',
                                                 cursor: 'pointer'
                                             }}
                                         >
                                             <div style={{ width: '3.5rem', height: '3.5rem', borderRadius: '1.25rem', background: 'rgba(212,175,55,0.06)', color: 'var(--gold)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                                 <opt.icon size={22} strokeWidth={1.2} />
                                             </div>
-                                            <span style={{ fontSize: '0.7rem', fontWeight: 900, color: isMobile ? 'white' : 'var(--charcoal)', letterSpacing: '0.2em', textTransform: 'uppercase', textAlign: 'center' }}>{opt.label}</span>
+                                            <div style={{ textAlign: 'center' }}>
+                                                <span style={{ fontSize: '0.7rem', fontWeight: 900, color: isMobile ? 'white' : 'var(--charcoal)', letterSpacing: '0.2em', textTransform: 'uppercase' }}>{opt.label}</span>
+                                                <p style={{ fontSize: '0.65rem', color: isMobile ? 'rgba(255,255,255,0.6)' : 'var(--stone)', marginTop: '0.4rem', fontWeight: 600 }}>{opt.desc}</p>
+                                            </div>
                                         </motion.div>
                                     ))}
                                 </div>
 
-                                <div className="flex" style={{ gap: '1.5rem', flexWrap: 'wrap', justifyContent: isMobile ? 'center' : 'flex-start' }}>
+                                <div className="flex" style={{ gap: '2rem', flexWrap: 'wrap', justifyContent: isMobile ? 'center' : 'flex-start' }}>
                                     <motion.a
-                                        href={`https://wa.me/${settings?.whatsappNumber}`}
+                                        href={`https://wa.me/${(settings?.whatsappNumber || '').replace(/\D/g, '') || settings?.contactPhone?.replace(/\D/g, '')}`}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="btn-luxury gold-gradient text-white"
                                         style={{
-                                            padding: '1.4rem 3.5rem',
-                                            fontSize: '0.8rem',
+                                            padding: '1.4rem 4rem',
+                                            fontSize: '0.9rem',
                                             fontWeight: 900,
                                             borderRadius: '1.5rem',
                                             boxShadow: '0 15px 30px rgba(212,175,55,0.3)',
                                             position: 'relative',
-                                            overflow: 'hidden'
+                                            overflow: 'hidden',
+                                            letterSpacing: '0.1em'
                                         }}
                                         whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.95 }}
